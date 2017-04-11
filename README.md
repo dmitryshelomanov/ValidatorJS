@@ -7,7 +7,6 @@ validator.make (inputs, {
   name: 'requaired|min:6' // правила для инпутов (инпутов обьект)
 });
 ```
-## Вызов
 ```js
 // есть ли ошибки
 validator.fails ();
