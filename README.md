@@ -34,5 +34,5 @@ import Vue from "vue";
 import validator from "validatores6";
 Vue.use(validator);
 // теперь методы доступны через
-this.$validator // this.$validatores6.make() и тд
+this.$validatores6 // this.$validatores6.make() и тд
 ```
