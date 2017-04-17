@@ -6,9 +6,12 @@ export default class Validator
     {
         this.rule = rule;
         this.errors = [];
-        this.make (inputs, rules);
     }
-
+    /**
+     * ВЫзов валидирующей функции
+     * @param {*поля для валидации} inputs 
+     * @param {*правила} rules 
+     */
     make (inputs, rules) 
     {
         for (let prop in rules) {
@@ -23,7 +26,13 @@ export default class Validator
             };
         };
     }
-
+    /**
+     * 
+     * @param {*значение} value 
+     * @param {*все поля} inputs 
+     * @param {*ключ} prop 
+     * @param {*алиас} attribute 
+     */
     callMethod (value, inputs, prop, attribute)
     {
         let moreParams = value.match (':') ?  value.split (':')[1] : null;
@@ -31,7 +40,9 @@ export default class Validator
             this[value.split (':')[0]] (attribute, [inputs[prop], moreParams]);
         }
     }
-
+    /**
+     * Проверка есть ли ошибки
+     */
     fails ()
     {
         if (this.errors.length > 0) {
@@ -40,6 +51,11 @@ export default class Validator
         return false;
     }
 
+    /**
+     * Обязательное к заполнению
+     * @param {*название поля} field 
+     * @param {*значение} param1 
+     */
     required (field, [value]) 
     {   
         if (value.length === 0) {
@@ -47,6 +63,11 @@ export default class Validator
         }
     }
 
+    /**
+     * Если меньше заданного значения то ошибка
+     * @param {*название поля} field 
+     * @param {*значение, с чем сравнить} param1 
+     */
     min (field, [value, num])
     {
         if (value.length < num) {
@@ -54,6 +75,11 @@ export default class Validator
         }
     }
 
+    /**Если больше заданного значения ошибка
+     * 
+     * @param {*название поля} field 
+     * @param {*значение, с чем сравнить} param1 
+     */
     max (field, [value, num])
     {
         if (value.length > num) {
@@ -61,6 +87,11 @@ export default class Validator
         }
     }
 
+    /**
+     * Проверить инпут на тип почты
+     * @param {*поле} field 
+     * @param {*значение} param1 
+     */
     email (field, [value])
     {
         if (value.match (/([@][a-z]+[\.][a-z]{2,4})/ig) === null) {
@@ -68,6 +99,11 @@ export default class Validator
         }
     }
 
+    /**
+     * проверить одни ли числа в поле
+     * @param {*поле} field 
+     * @param {*значение} param1 
+     */
     numbers (field, [value])
     {
         if (value.match (/[a-zА-я]+/ig) !== null) {
@@ -75,6 +111,11 @@ export default class Validator
         }
     }
 
+    /**
+     * ПРоверить что бы небыло цифр
+     * @param {*поле} field 
+     * @param {*значение} param1 
+     */
     string (field, [value])
     {
         if (value.match (/[0-9]+/ig) !== null) {
@@ -82,15 +123,35 @@ export default class Validator
         }
     }
 
+    /**
+     * ПВпушить ошибки
+     * @param {*сообщение} message 
+     * @param {*поле} field 
+     * @param {*атрибут после : (для min * max)} num 
+     */
     setError (message, field, num = null)
     {
         let value = message.replace (/:attribute/gmi, field)
                            .replace (/:min|:max/gmi, num);
         this.errors.push (value);
-    }
+    }   
 
+    /**
+     * Получить все ошибки
+     */
     get getError ()
     {
         return  this.errors;
+    }
+    /**
+     * Статический метод для внедрения зависимости во вью
+     * @param {*Vue} Vue 
+     */
+    static install (Vue) 
+    {
+        let validator = new Validator ();
+        Object.defineProperty(Vue.prototype, "$validator", {
+            get () { return validator; }
+        });
     }
 };

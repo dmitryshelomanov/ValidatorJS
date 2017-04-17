@@ -1,10 +1,11 @@
 # ValidatorJS
 ## Вызов
 ```js
-let validator = new Validator (inputs, {
+let validator = new Validator ();
+validator.make (inputs, {
   //rules
-  name: 'requaired|min:6' // правила для инпутов (инпутов обьект)
-});
+  name.alias: 'requaired|min:6' // правила для инпутов (инпутов обьект)
+})
 ```
 ```js
 //возможные проверки
@@ -20,10 +21,17 @@ eng: {
     
 }
 ```
-
 ```js
 // есть ли ошибки
 validator.fails ();
 // показать ошибки
 validator.getErrors;
+```
+## валидатор можно использовать с vue (nuxt)
+```js
+import Vue from "vue";
+import validator from "validatores6";
+Vue.use(validator);
+// теперь методы доступны через
+this.$validator // this.$validator.make() и тд
 ```
