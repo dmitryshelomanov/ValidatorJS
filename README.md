@@ -1,5 +1,6 @@
 # ValidatorJS
 ## Вызов
+
 ```js
 let validator = new Validator ();
 validator.make (inputs, {
@@ -33,5 +34,5 @@ import Vue from "vue";
 import validator from "validatores6";
 Vue.use(validator);
 // теперь методы доступны через
-this.$validator // this.$validator.make() и тд
+this.$validator // this.$validatores6.make() и тд
 ```
