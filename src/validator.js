@@ -1,38 +1,35 @@
-let inputs = {
-    name: '',
-    age: '19'
-};
+import rule from "./rules";
 
-let rule = {
-    min: 'значение :attribute меньше :min',
-    max: 'значение :attribute не должно быть больше чем :max',
-    required: 'значение :attribute обязательно',
-};
-
-class Validator 
+export default class Validator 
 {
-    constructor ()
+    constructor (inputs, rules)
     {
         this.rule = rule;
         this.errors = [];
+        this.make (inputs, rules);
     }
 
     make (inputs, rules) 
     {
         for (let prop in rules) {
-            if (typeof inputs[prop] !== "undefined") {
+            let name = prop.split ('.')[0];
+            let attribute = prop.split ('.')[1] ? prop.split ('.')[1] : prop.split ('.')[0];
+
+            if (typeof inputs[name] !== "undefined") {
                 let allRules = rules[prop].split ('|');
                 allRules.forEach ((value) => {
-                    this.callMethod (value, inputs, prop);
+                    this.callMethod (value, inputs, name, attribute);
                 });
             };
         };
     }
 
-    callMethod (value, inputs, prop)
+    callMethod (value, inputs, prop, attribute)
     {
         let moreParams = value.match (':') ?  value.split (':')[1] : null;
-        this[value.split (':')[0]] (prop, [inputs[prop], moreParams]);
+        if (typeof this[value.split (':')[0]] !== "undefined") {
+            this[value.split (':')[0]] (attribute, [inputs[prop], moreParams]);
+        }
     }
 
     fails ()
@@ -46,21 +43,42 @@ class Validator
     required (field, [value]) 
     {   
         if (value.length === 0) {
-            this.setError (this.rule['required'], field);
+            this.setError (this.rule.ru['required'], field);
         }
     }
 
     min (field, [value, num])
     {
         if (value.length < num) {
-            this.setError (this.rule['min'], field, num);
+            this.setError (this.rule.ru['min'], field, num);
         }
     }
 
     max (field, [value, num])
     {
         if (value.length > num) {
-            this.setError (this.rule['max'], field, num);
+            this.setError (this.rule.ru['max'], field, num);
+        }
+    }
+
+    email (field, [value])
+    {
+        if (value.match (/([@][a-z]+[\.][a-z]{2,4})/ig) === null) {
+             this.setError (this.rule.ru['email'], field);
+        }
+    }
+
+    numbers (field, [value])
+    {
+        if (value.match (/[a-zА-я]+/ig) !== null) {
+             this.setError (this.rule.ru['numbers'], field);
+        }
+    }
+
+    string (field, [value])
+    {
+        if (value.match (/[0-9]+/ig) !== null) {
+             this.setError (this.rule.ru['string'], field);
         }
     }
 
@@ -76,14 +94,3 @@ class Validator
         return  this.errors;
     }
 };
-
-let validator = new Validator ();
-
-validator.make (inputs, {
-    name: 'required|min:6',
-    age: 'required|min:6'
-});
-
-if (validator.fails) {
-    console.log (validator.getError);
-}
