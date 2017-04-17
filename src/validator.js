@@ -150,7 +150,7 @@ export default class Validator
     static install (Vue) 
     {
         let validator = new Validator ();
-        Object.defineProperty(Vue.prototype, "$validator", {
+        Object.defineProperty(Vue.prototype, "$validatores6", {
             get () { return validator; }
         });
     }
