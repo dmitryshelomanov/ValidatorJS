@@ -141,7 +141,9 @@ export default class Validator
      */
     get getError ()
     {
-        return  this.errors;
+        let errors = this.errors;
+        this.errors = [];
+        return  errors;
     }
     /**
      * Статический метод для внедрения зависимости во вью

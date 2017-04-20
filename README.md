@@ -28,7 +28,7 @@ validator.fails ();
 // показать ошибки
 validator.getErrors;
 ```
-## валидатор можно использовать с vue (nuxt)
+## валидатор можно использовать с vue
 ```js
 import Vue from "vue";
 import validator from "validatores6";
@@ -36,3 +36,17 @@ Vue.use(validator);
 // теперь методы доступны через
 this.$validatores6 // this.$validatores6.make() и тд
 ```
+### При использовании с nuxt 
+нужно в файле nuxt.config.js подключить плагин
+~plugins/validator.js
+```js
+import Vue from "vue";
+import Storage from "validatores6";
+
+Vue.use(Storage, {
+    driver: "localStorage"
+});
+// config
+  plugins: [
+    {src: '~plugins/validator.js'}
+  ]
