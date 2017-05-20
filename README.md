@@ -5,7 +5,7 @@
 let validator = new Validator ();
 validator.make (inputs, {
   //rules
-  name.alias: 'requaired|min:6' // правила для инпутов (инпутов обьект)
+  name.alias: 'requaired|min:6' // правила для инпутов
 })
 ```
 ```js
